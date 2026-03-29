@@ -609,8 +609,7 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="num" id="statItems">0</div><div class="label">Items Listed</div></div>
-  <div class="stat"><div class="num" id="statFamilies">0</div><div class="label">Families Helped</div></div>
+  <div class="stat"><div class="num" id="statItems">0</div><div class="label">Current Items</div></div>
   <div class="stat"><div class="num" id="statCities">0</div><div class="label">Cities</div></div>
   <div class="stat"><div class="num" id="statFee">₹0</div><div class="label">Fees Charged (Always)</div></div>
 </div>
@@ -737,14 +736,14 @@
 <script>
 // Data
 const SAMPLE = [
-  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'1200', negotiable:true, loc:'Chennai, TN', emoji:'🪑', seller:'Meena S.', email:'meena@gmail.com' },
-  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'6500', negotiable:false, loc:'Coimbatore, TN', emoji:'📱', seller:'Ravi K.', email:'ravi.k@gmail.com' },
-  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'850', negotiable:true, loc:'Madurai, TN', emoji:'👗', seller:'Latha M.', email:'latha.m@gmail.com' },
-  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'200', negotiable:false, loc:'Salem, TN', emoji:'📚', seller:'Vijay R.', email:'vijay.r@gmail.com' },
-  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'1500', negotiable:true, loc:'Trichy, TN', emoji:'🍳', seller:'Priya T.', email:'priya.t@gmail.com' },
-  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'1100', negotiable:true, loc:'Erode, TN', emoji:'🚲', seller:'Karthik L.', email:'karthik.l@gmail.com' },
-  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'1800', negotiable:false, loc:'Vellore, TN', emoji:'🌀', seller:'Sundar P.', email:'sundar.p@gmail.com' },
-  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'900', negotiable:true, loc:'Chennai, TN', emoji:'🗄️', seller:'Nirmala A.', email:'nirmala.a@gmail.com' },
+  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'4500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'9500', negotiable:true, loc:'Coimbatore, TN', img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'1800', negotiable:true, loc:'Madurai, TN', img:'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'550', negotiable:false, loc:'Salem, TN', img:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'2800', negotiable:true, loc:'Trichy, TN', img:'https://images.unsplash.com/photo-1584990347449-a8efb0b58c49?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'3500', negotiable:true, loc:'Erode, TN', img:'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'2200', negotiable:false, loc:'Vellore, TN', img:'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'5500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
 ];
 
 let products = [...SAMPLE];
@@ -762,9 +761,8 @@ function countUp(id, target, suffix='') {
   }, 30);
 }
 window.onload = () => {
-  countUp('statItems', 1243);
-  countUp('statFamilies', 872);
-  countUp('statCities', 48);
+  countUp('statItems', products.length);
+  countUp('statCities', 12);
   renderGrid();
 };
 document.getElementById('statFee').textContent = '₹0';
@@ -779,7 +777,8 @@ function renderGrid() {
   grid.innerHTML = filtered.length ? filtered.map((p,i) => `
     <div class="card" style="animation-delay:${i*0.05}s" onclick="showDetail(${p.id})">
       <div class="card-img">
-        <span class="emoji">${p.emoji}</span>
+        <img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:3rem;">🛍️</div>
         <div class="card-badge">${p.cat}</div>
         <div class="card-free">FREE TO LIST</div>
       </div>
@@ -810,7 +809,7 @@ function showDetail(id) {
   if (!p) return;
   document.getElementById('detailTitle').textContent = p.title;
   document.getElementById('detailBody').innerHTML = `
-    <div class="detail-img">${p.emoji}</div>
+    <div class="detail-img"><img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.style.display='none'"></div>
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <span style="background:rgba(240,165,0,0.1);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:0.8rem;">${p.cat}</span>
       <span style="background:rgba(46,168,112,0.1);color:var(--green);padding:4px 12px;border-radius:100px;font-size:0.8rem;">Free Listing</span>
@@ -864,12 +863,12 @@ function submitPost() {
   const loc = document.getElementById('postLocation').value.trim();
   const desc = document.getElementById('postDesc').value.trim();
   if (!title || !cat || !loc) { showToast('Please fill required fields ✦', true); return; }
-  const emojis = {Furniture:'🪑',Electronics:'📱',Clothing:'👗',Handmade:'🎨',Books:'📚',Kitchen:'🍳',Toys:'🧸'};
+  
   const neg = price.toLowerCase().includes('neg') || isNaN(price.replace('₹',''));
   products.unshift({
     id: Date.now(), title, desc: desc || 'Listed by a community member.', cat,
     price: price.replace(/[₹,]/g,'').replace(/neg.*/i,'').trim() || '0',
-    negotiable: neg, loc, emoji: emojis[cat] || '📦',
+    negotiable: neg, loc, img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop',
     seller: 'ARUNA', email: 'you@example.com'
   });
   currentCat = 'All';
@@ -880,6 +879,7 @@ function submitPost() {
   document.getElementById('postCategory').value='';
   document.getElementById('uploadIcon').textContent='📷';
   showToast('🎉 Listing published successfully!');
+  document.getElementById('statItems').textContent = products.length;
   scrollToGrid();
 }
 
