@@ -735,17 +735,158 @@
 
 <script>
 // Data
+import React from "react";
+
 const SAMPLE = [
-  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'4500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'9500', negotiable:true, loc:'Coimbatore, TN', img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'1800', negotiable:true, loc:'Madurai, TN', img:'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'550', negotiable:false, loc:'Salem, TN', img:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'2800', negotiable:true, loc:'Trichy, TN', img:'https://images.unsplash.com/photo-1584990347449-a8efb0b58c49?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'3500', negotiable:true, loc:'Erode, TN', img:'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'2200', negotiable:false, loc:'Vellore, TN', img:'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'5500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  {
+    id: 1,
+    title: "Wooden Study Table",
+    desc: "Good condition, 4 years old. Minor scratch on side.",
+    cat: "Furniture",
+    price: "4500",
+    negotiable: true,
+    loc: "Chennai, TN",
+    img: "https://source.unsplash.com/400x250/?wooden-study-table&sig=1",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 2,
+    title: "Samsung Galaxy A32",
+    desc: "Works perfectly, battery health 89%. Includes charger.",
+    cat: "Electronics",
+    price: "9500",
+    negotiable: true,
+    loc: "Coimbatore, TN",
+    img: "https://source.unsplash.com/400x250/?samsung-phone&sig=2",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 3,
+    title: "Handwoven Cotton Saree",
+    desc: "Handmade, traditional design, never worn.",
+    cat: "Handmade",
+    price: "1800",
+    negotiable: true,
+    loc: "Madurai, TN",
+    img: "https://source.unsplash.com/400x250/?cotton-saree&sig=3",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 4,
+    title: "NCERT Class 10 Set",
+    desc: "All subjects, good condition. Minor pencil marks.",
+    cat: "Books",
+    price: "550",
+    negotiable: false,
+    loc: "Salem, TN",
+    img: "https://source.unsplash.com/400x250/?school-books&sig=4",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 5,
+    title: "Iron Cookware Set",
+    desc: "Cast iron kadai + tawa, lightly used, well-seasoned.",
+    cat: "Kitchen",
+    price: "2800",
+    negotiable: true,
+    loc: "Trichy, TN",
+    img: "https://source.unsplash.com/400x250/?cast-iron-cookware&sig=5",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 6,
+    title: 'Kids Bicycle 20"',
+    desc: "Blue, used for 2 years. Needs tyre pump.",
+    cat: "Toys",
+    price: "3500",
+    negotiable: true,
+    loc: "Erode, TN",
+    img: "https://source.unsplash.com/400x250/?kids-bicycle&sig=6",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 7,
+    title: "Ceiling Fan (Usha)",
+    desc: '48" sweep, 3 months old, moving so selling.',
+    cat: "Electronics",
+    price: "2200",
+    negotiable: false,
+    loc: "Vellore, TN",
+    img: "https://source.unsplash.com/400x250/?ceiling-fan&sig=7",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
+  {
+    id: 8,
+    title: "Plastic Almirah",
+    desc: "2-door, full-length mirror, beige color. Self pickup.",
+    cat: "Furniture",
+    price: "5500",
+    negotiable: true,
+    loc: "Chennai, TN",
+    img: "https://source.unsplash.com/400x250/?wardrobe-furniture&sig=8",
+    seller: "Aruna Suganthi S",
+    email: "arunaammu0721@gmail.com",
+  },
 ];
 
+export default function App() {
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h2>Marketplace</h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {SAMPLE.map((item) => (
+          <div
+            key={item.id}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "10px",
+              padding: "10px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            }}
+          >
+            <img
+              src={item.img}
+              alt={item.title}
+              style={{
+                width: "100%",
+                height: "150px",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+              onError={(e) =>
+                (e.target.src =
+                  "https://via.placeholder.com/400x250?text=No+Image")
+              }
+            />
+
+            <h3>{item.title}</h3>
+            <p>{item.desc}</p>
+            <p><strong>₹{item.price}</strong></p>
+            <p>{item.loc}</p>
+
+            {item.negotiable && (
+              <span style={{ color: "green" }}>Negotiable</span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 let products = [...SAMPLE];
 let currentCat = 'All';
 let loggedIn = false;
