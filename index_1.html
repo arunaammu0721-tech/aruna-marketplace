@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARUNA — Free Community Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2530;
+    --border: #2a3340;
+    --accent: #f0a500;
+    --accent2: #e05c1a;
+    --text: #e8edf3;
+    --muted: #7a8a9a;
+    --green: #2ea870;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,17,23,0.85);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo .dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
+
+  .nav-actions { display: flex; gap: 12px; align-items: center; }
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .btn-primary {
+    background: var(--accent);
+    color: #0d1117;
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: #ffb830; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(240,165,0,0.3); }
+
+  /* HERO */
+  .hero {
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(240,165,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(224,92,26,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(240,165,0,0.1);
+    border: 1px solid rgba(240,165,0,0.2);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 700px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero p {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions {
+    margin-top: 36px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-large { padding: 14px 28px; font-size: 1rem; border-radius: 10px; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* STATS STRIP */
+  .stats {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .stat {
+    flex: 1;
+    padding: 24px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat .num {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat .label { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+  /* SEARCH */
+  .search-section {
+    padding: 40px 40px 20px;
+  }
+  .search-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 16px;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus-within { border-color: var(--accent); }
+  .search-box svg { color: var(--muted); flex-shrink: 0; }
+  .search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 14px 0;
+  }
+  .search-box input::placeholder { color: var(--muted); }
+
+  .filter-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .chip {
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 0.83rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .chip:hover, .chip.active {
+    background: var(--accent);
+    color: #0d1117;
+    border-color: var(--accent);
+  }
+
+  /* GRID */
+  .section-header {
+    padding: 28px 40px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  .section-header a {
+    color: var(--accent);
+    font-size: 0.875rem;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 0 40px 40px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:hover {
+    border-color: rgba(240,165,0,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-img .emoji { font-size: 3rem; }
+  .card-badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: rgba(13,17,23,0.8);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .card-free {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--green);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 600;
+  }
+
+  .card-body { padding: 16px; }
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.83rem;
+    line-height: 1.5;
+    height: 2.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .card-price {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+  .card-price.negotiable { font-size: 0.9rem; color: var(--green); font-family: 'DM Sans', sans-serif; }
+  .card-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.25s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .close-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+  }
+  .close-btn:hover { color: var(--text); border-color: var(--muted); }
+  .modal-body { padding: 24px 28px; }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--accent); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-group select option { background: var(--surface); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+  .upload-zone:hover { border-color: var(--accent); color: var(--accent); }
+  .upload-zone .icon { font-size: 2rem; margin-bottom: 8px; }
+  .upload-zone p { font-size: 0.85rem; }
+
+  /* DETAIL MODAL */
+  .detail-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .detail-price {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 8px 0;
+  }
+  .contact-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .contact-box h4 { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+  .seller-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .seller-email { color: var(--accent); font-size: 0.9rem; }
+
+  .btn-contact {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--accent);
+    color: #0d1117;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-contact:hover { background: #ffb830; transform: translateY(-1px); }
+
+  /* LOGIN MODAL */
+  .login-content { text-align: center; padding: 40px 28px; }
+  .login-content .big-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .login-content p { color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-google:hover { border-color: var(--muted); background: var(--bg); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer .logo { font-size: 1.1rem; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--green);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    z-index: 500;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    .hero, .search-section, .section-header { padding-left: 20px; padding-right: 20px; }
+    .grid { padding: 0 20px 40px; gap: 14px; }
+    .stat { padding: 18px 20px; }
+    .stats { flex-wrap: wrap; }
+    .stat { min-width: 50%; }
+    footer { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo"><span class="dot"></span>ARUNA</div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openLogin()">Sign In</button>
+    <button class="btn btn-primary" onclick="openPost()">+ List Item</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ 100% Free · No Commissions · No Fees</div>
+  <h1>Your Community's<br><em>Free Marketplace</em></h1>
+  <p>Sell household items, handmade goods, and anything useful — helping families earn from what they already have. No listing fees, ever.</p>
+  <div class="hero-actions">
+    <button class="btn btn-primary btn-large" onclick="openPost()">List Something Free</button>
+    <button class="btn btn-ghost btn-large" onclick="scrollToGrid()">Browse Listings ↓</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="num" id="statItems">0</div><div class="label">Current Items</div></div>
+  <div class="stat"><div class="num" id="statCities">0</div><div class="label">Cities</div></div>
+  <div class="stat"><div class="num" id="statFee">₹0</div><div class="label">Fees Charged (Always)</div></div>
+</div>
+
+<!-- SEARCH -->
+<section class="search-section">
+  <div class="search-row">
+    <div class="search-box">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search items near you…" oninput="filterItems()">
+    </div>
+    <button class="btn btn-ghost">📍 Detect Location</button>
+  </div>
+  <div class="filter-chips" id="filterChips">
+    <button class="chip active" onclick="setCategory('All', this)">All</button>
+    <button class="chip" onclick="setCategory('Furniture', this)">🪑 Furniture</button>
+    <button class="chip" onclick="setCategory('Electronics', this)">📱 Electronics</button>
+    <button class="chip" onclick="setCategory('Clothing', this)">👗 Clothing</button>
+    <button class="chip" onclick="setCategory('Handmade', this)">🧵 Handmade</button>
+    <button class="chip" onclick="setCategory('Books', this)">📚 Books</button>
+    <button class="chip" onclick="setCategory('Kitchen', this)">🍳 Kitchen</button>
+    <button class="chip" onclick="setCategory('Toys', this)">🧸 Toys</button>
+  </div>
+</section>
+
+<!-- GRID -->
+<div class="section-header" id="listingsGrid">
+  <h2>Recent Listings</h2>
+  <a href="#" onclick="return false">View All →</a>
+</div>
+<div class="grid" id="productGrid"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">✦ ARUNA</div>
+  <div>Created by ARUNA · Free Community Marketplace</div>
+  <div>Next.js · PostgreSQL · Google OAuth</div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal" onclick="closeIfOverlay(event,'loginModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Welcome to ARUNA</h3>
+      <button class="close-btn" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div class="login-content">
+      <div class="big-logo">✦</div>
+      <p>Sign in to list your items and connect with buyers in your community. Free, always.</p>
+      <button class="btn-google" onclick="mockLogin()">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.7-6.7C35.6 2.3 30.1 0 24 0 14.7 0 6.7 5.5 2.8 13.5l7.8 6C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.4c-.5 2.8-2.2 5.2-4.6 6.8l7.2 5.6c4.2-3.9 6.7-9.7 6.7-16.4z"/><path fill="#4A90D9" d="M10.6 28.5A14.4 14.4 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5l-7.8-6A23.9 23.9 0 0 0 0 24c0 3.9.9 7.5 2.8 10.5l7.8-6z"/><path fill="#FBBC05" d="M24 48c6.1 0 11.3-2 15.1-5.5l-7.2-5.6c-2 1.4-4.6 2.1-7.9 2.1-6.2 0-11.5-4.1-13.4-9.5l-7.8 6C6.7 42.5 14.7 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="postModal" onclick="closeIfOverlay(event,'postModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>List an Item</h3>
+      <button class="close-btn" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Product Image</label>
+        <div class="upload-zone" onclick="document.getElementById('imgFile').click()">
+          <div class="icon" id="uploadIcon">📷</div>
+          <p>Click to upload photo</p>
+        </div>
+        <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="previewEmoji(this)">
+      </div>
+      <div class="form-group">
+        <label>Title *</label>
+        <input type="text" id="postTitle" placeholder="e.g. Wooden dining table, 4 chairs">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="postDesc" placeholder="Describe the item's condition, age, etc."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="postCategory">
+            <option value="">Select category</option>
+            <option>Furniture</option>
+            <option>Electronics</option>
+            <option>Clothing</option>
+            <option>Handmade</option>
+            <option>Books</option>
+            <option>Kitchen</option>
+            <option>Toys</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <input type="text" id="postPrice" placeholder="e.g. 500 or Negotiable">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Location *</label>
+        <input type="text" id="postLocation" placeholder="e.g. Coimbatore, Tamil Nadu">
+      </div>
+      <button class="btn-contact" onclick="submitPost()">✦ Publish Listing — Free</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal" onclick="closeIfOverlay(event,'detailModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="detailTitle">Item Detail</h3>
+      <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<script>
+// Data
+const SAMPLE = [
+  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'4500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'9500', negotiable:true, loc:'Coimbatore, TN', img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'1800', negotiable:true, loc:'Madurai, TN', img:'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'550', negotiable:false, loc:'Salem, TN', img:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'2800', negotiable:true, loc:'Trichy, TN', img:'https://images.unsplash.com/photo-1584990347449-a8efb0b58c49?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'3500', negotiable:true, loc:'Erode, TN', img:'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'2200', negotiable:false, loc:'Vellore, TN', img:'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'5500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+];
+
+let products = [...SAMPLE];
+let currentCat = 'All';
+let loggedIn = false;
+
+function countUp(id, target, suffix='') {
+  let cur = 0;
+  const el = document.getElementById(id);
+  const step = Math.ceil(target / 50);
+  const t = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = suffix + (cur >= 1000 ? (cur/1000).toFixed(1)+'K' : cur);
+    if (cur >= target) clearInterval(t);
+  }, 30);
+}
+window.onload = () => {
+  countUp('statItems', products.length);
+  countUp('statCities', 12);
+  renderGrid();
+};
+document.getElementById('statFee').textContent = '₹0';
+
+function renderGrid() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const grid = document.getElementById('productGrid');
+  const filtered = products.filter(p =>
+    (currentCat === 'All' || p.cat === currentCat) &&
+    (!q || p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q))
+  );
+  grid.innerHTML = filtered.length ? filtered.map((p,i) => `
+    <div class="card" style="animation-delay:${i*0.05}s" onclick="showDetail(${p.id})">
+      <div class="card-img">
+        <img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:3rem;">🛍️</div>
+        <div class="card-badge">${p.cat}</div>
+        <div class="card-free">FREE TO LIST</div>
+      </div>
+      <div class="card-body">
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-footer">
+          <div class="${p.negotiable?'card-price negotiable':'card-price'}">
+            ${p.negotiable ? '🤝 ₹'+p.price+' (Neg.)' : '₹'+p.price}
+          </div>
+          <div class="card-location">📍 ${p.loc}</div>
+        </div>
+      </div>
+    </div>`).join('') : '<div style="padding:40px;color:var(--muted);grid-column:1/-1;text-align:center">No listings found. Be the first to list!</div>';
+}
+
+function filterItems() { renderGrid(); }
+
+function setCategory(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function showDetail(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('detailTitle').textContent = p.title;
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-img"><img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.style.display='none'"></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span style="background:rgba(240,165,0,0.1);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:0.8rem;">${p.cat}</span>
+      <span style="background:rgba(46,168,112,0.1);color:var(--green);padding:4px 12px;border-radius:100px;font-size:0.8rem;">Free Listing</span>
+    </div>
+    <div class="detail-price">${p.negotiable ? '₹'+p.price+' <span style="font-size:0.9rem;color:var(--green)">Negotiable</span>' : '₹'+p.price}</div>
+    <p style="color:var(--muted);line-height:1.7;margin-top:8px;font-size:0.95rem">${p.desc}</p>
+    <p style="margin-top:12px;font-size:0.85rem;color:var(--muted)">📍 ${p.loc}</p>
+    <div class="contact-box">
+      <h4>SELLER CONTACT</h4>
+      <div class="seller-name">${p.seller}</div>
+      <div class="seller-email">${loggedIn ? p.email : '•••••@•••.com (Sign in to view)'}</div>
+      <button class="btn-contact" onclick="${loggedIn ? `window.location.href='mailto:${p.email}'` : `closeModal('detailModal');openLogin()`}">
+        ${loggedIn ? '📧 Contact Seller' : '🔑 Sign in to Contact Seller'}
+      </button>
+    </div>`;
+  openModal('detailModal');
+}
+
+function scrollToGrid() { document.getElementById('listingsGrid').scrollIntoView({behavior:'smooth'}); }
+
+// MODALS
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeIfOverlay(e, id) { if (e.target.id === id) closeModal(id); }
+function openLogin() { openModal('loginModal'); }
+function openPost() {
+  if (!loggedIn) { openLogin(); return; }
+  openModal('postModal');
+}
+
+function mockLogin() {
+  loggedIn = true;
+  closeModal('loginModal');
+  showToast('✓ Signed in as Community Member');
+  document.querySelector('nav .nav-actions').innerHTML = `
+    <span style="color:var(--muted);font-size:0.85rem">👤 Member</span>
+    <button class="btn btn-primary" onclick="openPost()">+ List Item</button>
+  `;
+}
+
+function previewEmoji(input) {
+  if (input.files[0]) {
+    document.getElementById('uploadIcon').textContent = '✅';
+  }
+}
+
+function submitPost() {
+  const title = document.getElementById('postTitle').value.trim();
+  const cat = document.getElementById('postCategory').value;
+  const price = document.getElementById('postPrice').value.trim() || 'Free';
+  const loc = document.getElementById('postLocation').value.trim();
+  const desc = document.getElementById('postDesc').value.trim();
+  if (!title || !cat || !loc) { showToast('Please fill required fields ✦', true); return; }
+  
+  const neg = price.toLowerCase().includes('neg') || isNaN(price.replace('₹',''));
+  products.unshift({
+    id: Date.now(), title, desc: desc || 'Listed by a community member.', cat,
+    price: price.replace(/[₹,]/g,'').replace(/neg.*/i,'').trim() || '0',
+    negotiable: neg, loc, img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop',
+    seller: 'ARUNA', email: 'you@example.com'
+  });
+  currentCat = 'All';
+  document.querySelectorAll('.chip').forEach((c,i)=>{ if(i===0) c.classList.add('active'); else c.classList.remove('active'); });
+  renderGrid();
+  closeModal('postModal');
+  ['postTitle','postDesc','postLocation','postPrice'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('postCategory').value='';
+  document.getElementById('uploadIcon').textContent='📷';
+  showToast('🎉 Listing published successfully!');
+  document.getElementById('statItems').textContent = products.length;
+  scrollToGrid();
+}
+
+function showToast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = err ? '#c0392b' : 'var(--green)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
