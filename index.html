@@ -736,14 +736,14 @@
 <script>
 // Data
 const SAMPLE = [
-  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'4500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'9500', negotiable:true, loc:'Coimbatore, TN', img:'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'1800', negotiable:true, loc:'Madurai, TN', img:'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'550', negotiable:false, loc:'Salem, TN', img:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'2800', negotiable:true, loc:'Trichy, TN', img:'https://images.unsplash.com/photo-1584990347449-a8efb0b58c49?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'3500', negotiable:true, loc:'Erode, TN', img:'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'2200', negotiable:false, loc:'Vellore, TN', img:'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
-  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'5500', negotiable:true, loc:'Chennai, TN', img:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=400&h=250&fit=crop&q=80', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:1, title:'Wooden Study Table', desc:'Good condition, 4 years old. Minor scratch on side.', cat:'Furniture', price:'4500', negotiable:true, loc:'Chennai, TN', img:'https://cdn.pixabay.com/photo/2016/11/19/13/06/desk-1839446_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:2, title:'Samsung Galaxy A32', desc:'Works perfectly, battery health 89%. Includes charger.', cat:'Electronics', price:'9500', negotiable:true, loc:'Coimbatore, TN', img:'https://cdn.pixabay.com/photo/2016/12/09/11/33/smartphone-1894723_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:3, title:'Handwoven Cotton Saree', desc:'Handmade, traditional design, never worn.', cat:'Handmade', price:'1800', negotiable:true, loc:'Madurai, TN', img:'https://cdn.pixabay.com/photo/2019/11/07/20/48/saree-4609812_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:4, title:'NCERT Class 10 Set', desc:'All subjects, good condition. Minor pencil marks.', cat:'Books', price:'550', negotiable:false, loc:'Salem, TN', img:'https://cdn.pixabay.com/photo/2015/09/05/21/51/reading-925589_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:5, title:'Iron Cookware Set', desc:'Cast iron kadai + tawa, lightly used, well-seasoned.', cat:'Kitchen', price:'2800', negotiable:true, loc:'Trichy, TN', img:'https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:6, title:'Kids Bicycle 20"', desc:'Blue, used for 2 years. Needs tyre pump.', cat:'Toys', price:'3500', negotiable:true, loc:'Erode, TN', img:'https://cdn.pixabay.com/photo/2017/07/05/15/41/bicycle-2475693_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:7, title:'Ceiling Fan (Usha)', desc:'48" sweep, 3 months old, moving so selling.', cat:'Electronics', price:'2200', negotiable:false, loc:'Vellore, TN', img:'https://cdn.pixabay.com/photo/2014/04/05/11/40/ceiling-fan-316682_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
+  { id:8, title:'Plastic Almirah', desc:'2-door, full-length mirror, beige color. Self pickup.', cat:'Furniture', price:'5500', negotiable:true, loc:'Chennai, TN', img:'https://cdn.pixabay.com/photo/2017/08/05/12/28/almirah-2583454_640.jpg', seller:'Aruna Suganthi S', email:'arunaammu0721@gmail.com' },
 ];
 
 let products = [...SAMPLE];
@@ -761,6 +761,7 @@ function countUp(id, target, suffix='') {
   }, 30);
 }
 window.onload = () => {
+  loadProducts();
   countUp('statItems', products.length);
   countUp('statCities', 12);
   renderGrid();
@@ -850,10 +851,38 @@ function mockLogin() {
   `;
 }
 
+let uploadedImageData = null;
+
 function previewEmoji(input) {
-  if (input.files[0]) {
-    document.getElementById('uploadIcon').textContent = '✅';
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      uploadedImageData = e.target.result;
+      document.getElementById('uploadIcon').textContent = '✅';
+      document.getElementById('uploadIcon').style.fontSize = '1.5rem';
+      // Show preview
+      const zone = document.querySelector('.upload-zone');
+      zone.innerHTML = `<img src="${uploadedImageData}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;">`;
+    };
+    reader.readAsDataURL(input.files[0]);
   }
+}
+
+function saveProducts() {
+  try { localStorage.setItem('aruna_products', JSON.stringify(products)); } catch(e) {}
+}
+
+function loadProducts() {
+  try {
+    const saved = localStorage.getItem('aruna_products');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge saved with sample — saved products first, then sample
+      const sampleIds = SAMPLE.map(p => p.id);
+      const savedNew = parsed.filter(p => !sampleIds.includes(p.id));
+      products = [...savedNew, ...SAMPLE];
+    }
+  } catch(e) {}
 }
 
 function submitPost() {
@@ -868,16 +897,19 @@ function submitPost() {
   products.unshift({
     id: Date.now(), title, desc: desc || 'Listed by a community member.', cat,
     price: price.replace(/[₹,]/g,'').replace(/neg.*/i,'').trim() || '0',
-    negotiable: neg, loc, img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=250&fit=crop',
+    negotiable: neg, loc,
+    img: uploadedImageData || 'https://cdn.pixabay.com/photo/2016/03/31/20/51/shops-1294858_640.jpg',
     seller: 'ARUNA', email: 'you@example.com'
   });
   currentCat = 'All';
   document.querySelectorAll('.chip').forEach((c,i)=>{ if(i===0) c.classList.add('active'); else c.classList.remove('active'); });
   renderGrid();
+  saveProducts();
   closeModal('postModal');
   ['postTitle','postDesc','postLocation','postPrice'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('postCategory').value='';
-  document.getElementById('uploadIcon').textContent='📷';
+  uploadedImageData = null;
+  document.querySelector('.upload-zone').innerHTML = '<div class="icon" id="uploadIcon">📷</div><p>Click to upload photo</p>';
   showToast('🎉 Listing published successfully!');
   document.getElementById('statItems').textContent = products.length;
   scrollToGrid();
